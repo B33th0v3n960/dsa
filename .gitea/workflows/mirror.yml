@@ -1,0 +1,19 @@
+name: Push to GitHub
+run-name: ${{ gitea.actor }} pushed code to github
+on: [push]
+
+jobs:
+  push-to-github:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Gitea Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to GitHub
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+        run: |
+          git remote add github https://${{ github.actor }}:${GITHUB_TOKEN}@github.com/B33th0v3n960/dsa.git
+          git push github main   
