@@ -13,9 +13,14 @@ function(create_library lib_name)
 endfunction()
 
 create_library(utils
-    ./utils/print_array.c
+    ./utils/array_utils.c
+    ./utils/swap.c
 )
-create_library(insertion_sort ./algorithms/insertion_sort.c)
+
+create_library(algorithms 
+    ./algorithms/insertion_sort.c
+)
+target_link_libraries(algorithms PRIVATE utils project_options)
 
 # buildin the main executable
 add_executable(${PROJECT_NAME} main.c)
@@ -23,7 +28,7 @@ add_executable(${PROJECT_NAME} main.c)
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         utils
-        insertion_sort
+        algorithms
         project_options
 )
 
