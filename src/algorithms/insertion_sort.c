@@ -1,13 +1,18 @@
 #include "algorithms/insertion_sort.h"
+#include "utils/swap.h"
+#include <stddef.h>
+#include <stdlib.h>
 
-void insertion_sort(int array[], int array_length) {
-    for (int i = 1; i < array_length; i++) {
-        int current = array[i];
-        int j = i - 1;
-        while (j >= 0 && array[j] > current) {
-            array[j + 1] = array[j];
+void insertion_sort(void *base, size_t nmemb, size_t size, comp_fn comp) {
+    for (size_t i = 1; i < nmemb; i++) {
+        size_t j = i - 1;
+        char *elem_j = (char *)base + j * size;
+
+        while (comp((void *)(elem_j + size), (void *)elem_j) < 0) {
+            swap((void *)(elem_j + size), (void *)elem_j, size);
+            if (j == 0) break;
             j--;
+            elem_j = (char *)base + j * size;
         }
-        array[j + 1] = current;
     }
 }
