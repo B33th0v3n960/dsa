@@ -4,3 +4,4 @@ IndentWidth: 4
 AllowShortIfStatementsOnASingleLine: WithoutElse
 AlignConsecutiveMacros: Consecutive
 AllowShortFunctionsOnASingleLine: None
+ColumnLimit: 120
