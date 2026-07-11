@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 static int test_count = 0;
 
@@ -38,6 +39,10 @@ int comp_person_age(const void *a, const void *b) {
     const Person *value_a = (Person *)a;
     const Person *value_b = (Person *)b;
     return (value_a->age > value_b->age) - (value_a->age < value_b->age);
+}
+
+int comp_str(const void *a, const void *b) {
+    return strcmp((char *)b, (char *)a);
 }
 
 /** A utility function to print Person array of size n */
@@ -92,6 +97,19 @@ void test_struct_list(void) {
     printf("Expected: ");
     print_array_person(expected, len);
     TEST_ASSERT_EQUAL_MEMORY_ARRAY(expected, actual, len, sizeof(Person));
+}
+
+void test_str_list(void) {
+    char *actual[] = {"oranges", NULL, "banana", "apple"};
+    char *expected[] = {"apple", "banana", "oranges", NULL};
+    size_t len = array_len(actual);
+    insertion_sort(actual, len, sizeof(actual[0]), comp_str);
+
+    printf("Actual: ");
+    print_array_str(actual, len);
+    printf("Expected: ");
+    print_array_str(expected, len);
+    TEST_ASSERT_EQUAL_STRING_ARRAY(expected, actual, len);
 }
 
 void test_empty_list(void) {
@@ -1609,6 +1627,7 @@ int main(void) {
     RUN_TEST(test_int_list);
     RUN_TEST(test_float_list);
     RUN_TEST(test_struct_list);
+    RUN_TEST(test_str_list);
     RUN_TEST(test_empty_list);
     RUN_TEST(test_single_element_list);
     RUN_TEST(test_ordered_list);
