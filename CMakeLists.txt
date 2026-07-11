@@ -19,7 +19,7 @@ endif()
 
 option(TEST_FLAG "Build tests" ON)
 option(WERROR_FLAG "Treat warnings as errors" ON)
-option(SANITIZERS_FLAG "Enable ASan/UBSan in Debug builds" OFF)
+option(SANITIZERS_FLAG "Enable ASan/UBSan in Debug builds" ON)
 
 add_library(project_options INTERFACE)
 target_compile_features(project_options INTERFACE c_std_11)
