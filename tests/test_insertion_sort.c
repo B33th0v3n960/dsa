@@ -1,9 +1,17 @@
 #include "algorithms/insertion_sort.h"
 #include "unity.h"
+#include "unity_internals.h"
 #include "utils/array_utils.h"
 #include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+static int test_count = 0;
 
 void setUp(void) {
+    ++test_count;
+    printf("\n");
+    printf("==== Test No.%d ====\n", test_count);
 }
 
 void tearDown(void) {
@@ -15,55 +23,143 @@ int comp_int(const void *a, const void *b) {
     return (value_a > value_b) - (value_a < value_b);
 }
 
+int comp_float(const void *a, const void *b) {
+    const float value_a = *(float *)a;
+    const float value_b = *(float *)b;
+    return (value_a > value_b) - (value_a < value_b);
+}
+
+typedef struct Person {
+    char *name;
+    int age;
+} Person;
+
+int comp_person_age(const void *a, const void *b) {
+    const Person *value_a = (Person *)a;
+    const Person *value_b = (Person *)b;
+    return (value_a->age > value_b->age) - (value_a->age < value_b->age);
+}
+
+/** A utility function to print Person array of size n */
+void print_array_person(Person array[], size_t array_length) {
+    printf("[\n");
+    for (size_t i = 0; i < array_length; i++) {
+        printf("{name: %s, age: %d}, ", array[i].name, array[i].age);
+    }
+    printf("\n]\n");
+}
+
 void test_int_list(void) {
-    int test_list[] = {12, 11, 13, 5, 6};
-    int exp[] = {5, 6, 11, 12, 13};
-    size_t len = array_len(test_list);
-    insertion_sort(test_list, len, sizeof(test_list[0]), *comp_int);
-    print_array_int(test_list, (int)len);
-    TEST_ASSERT_EQUAL_INT_ARRAY(exp, test_list, len);
+    int actual[] = {12, 11, 13, 5, 6};
+    int expected[] = {5, 6, 11, 12, 13};
+    size_t len = array_len(actual);
+
+    insertion_sort(actual, len, sizeof(actual[0]), comp_int);
+
+    printf("Actual: ");
+    print_array_int(actual, len);
+    printf("Expected: ");
+    print_array_int(expected, len);
+    TEST_ASSERT_EQUAL_INT_ARRAY(expected, actual, len);
 }
 
 void test_float_list(void) {
-    float test_list[] = {12.2f, 11.32f, 13.7f, 5.4f, 6.7f};
-    float exp[] = {5.4f, 6.7f, 11.32f, 12.2f, 13.7f};
-    size_t len = array_len(test_list);
-    insertion_sort(test_list, len, sizeof(test_list[0]), *comp_int);
-    TEST_ASSERT_EQUAL_INT_ARRAY(exp, test_list, len);
+    float actual[] = {12.2f, 11.32f, 13.7f, 5.4f, 6.7f};
+    float expected[] = {5.4f, 6.7f, 11.32f, 12.2f, 13.7f};
+    size_t len = array_len(actual);
+
+    insertion_sort(actual, len, sizeof(actual[0]), comp_int);
+
+    printf("Actual: ");
+    print_array_float(actual, len);
+    printf("Expected: ");
+    print_array_float(expected, len);
+    TEST_ASSERT_EQUAL_FLOAT_ARRAY(expected, actual, len);
 }
 
 void test_struct_list(void) {
+    Person bob = {"Bob", 21};
+    Person alice = {"Alice", 11};
+    Person charlie = {"Charlie", 6};
+    Person jane = {"Jane", 31};
+    Person actual[] = {bob, alice, charlie, jane};
+    Person expected[] = {charlie, alice, bob, jane};
+    size_t len = array_len(actual);
+    insertion_sort(actual, len, sizeof(actual[0]), comp_person_age);
+
+    printf("Actual: ");
+    print_array_person(actual, len);
+    printf("Expected: ");
+    print_array_person(expected, len);
+    TEST_ASSERT_EQUAL_MEMORY_ARRAY(expected, actual, len, sizeof(Person));
 }
 
 void test_empty_list(void) {
+    int *actual = NULL;
+    size_t len = 0;
+
+    int result = insertion_sort(actual, len, sizeof(actual[0]), comp_int);
+    TEST_ASSERT(result == -1);
 }
 
 void test_single_element_list(void) {
-    int test_list[] = {1};
-    int exp[] = {1};
-    size_t len = array_len(test_list);
-    insertion_sort(test_list, len, sizeof(test_list[0]), *comp_int);
-    print_array_int(test_list, (int)len);
-    TEST_ASSERT_EQUAL_INT_ARRAY(exp, test_list, len);
+    int actual[] = {1};
+    int expected[] = {1};
+    size_t len = array_len(actual);
+
+    insertion_sort(actual, len, sizeof(actual[0]), comp_int);
+
+    printf("Actual: ");
+    print_array_int(actual, len);
+    printf("Expected: ");
+    print_array_int(expected, len);
+    TEST_ASSERT_EQUAL_INT_ARRAY(expected, actual, len);
 }
 
 void test_ordered_list(void) {
+    int actual[] = {0, 1, 2, 3, 4, 5, 6};
+    int expected[] = {0, 1, 2, 3, 4, 5, 6};
+    size_t len = array_len(actual);
+
+    insertion_sort(actual, len, sizeof(actual[0]), comp_int);
+
+    printf("Actual: ");
+    print_array_int(actual, len);
+    printf("Expected: ");
+    print_array_int(expected, len);
+    TEST_ASSERT_EQUAL_INT_ARRAY(expected, actual, len);
 }
 
 void test_reverse_list(void) {
+    int actual[] = {6, 5, 4, 3, 2, 1, 0};
+    int expected[] = {0, 1, 2, 3, 4, 5, 6};
+    size_t len = array_len(actual);
+
+    insertion_sort(actual, len, sizeof(actual[0]), comp_int);
+
+    printf("Actual: ");
+    print_array_int(actual, len);
+    printf("Expected: ");
+    print_array_int(expected, len);
+    TEST_ASSERT_EQUAL_INT_ARRAY(expected, actual, len);
 }
 
 void test_same_elements_list(void) {
-    int test_list[] = {5, 5, 5, 5, 5, 5, 5};
-    int exp[] = {5, 5, 5, 5, 5, 5, 5};
-    size_t len = array_len(test_list);
-    insertion_sort(test_list, len, sizeof(test_list[0]), *comp_int);
-    print_array_int(test_list, (int)len);
-    TEST_ASSERT_EQUAL_INT_ARRAY(exp, test_list, len);
+    int actual[] = {5, 5, 5, 5, 5, 5, 5};
+    int expected[] = {5, 5, 5, 5, 5, 5, 5};
+    size_t len = array_len(actual);
+
+    insertion_sort(actual, len, sizeof(actual[0]), comp_int);
+
+    printf("Actual: ");
+    print_array_int(actual, len);
+    printf("Expected: ");
+    print_array_int(expected, len);
+    TEST_ASSERT_EQUAL_INT_ARRAY(expected, actual, len);
 }
 
 void test_large_list(void) {
-    int test_list[10000] = {
+    int actual[10000] = {
         22059,  -17189, 95994,  84856,  -27039, 10426,  62200,  -29485, -83174, 90479,  54377,  -60133, -92197, -79053,
         -76911, -14429, 55532,  45772,  -63268, 33196,  29316,  -74381, -93693, -87201, -42708, -41606, 92453,  56794,
         -67678, -28773, 53408,  -63322, -73952, -53765, 27752,  89122,  -45823, 52267,  -59096, 90026,  -17110, -33156,
@@ -780,7 +876,7 @@ void test_large_list(void) {
         96456,  -79309, -5120,  8520,   78276,  -84336, -79059, -2715,  -84521, 50248,  -91721, 27073,  -14915, -92177,
         63176,  77408,  -27000, -87818,
     };
-    int exp[10000] = {
+    int expected[10000] = {
         -99930, -99925, -99908, -99855, -99831, -99817, -99817, -99816, -99771, -99759, -99750, -99717, -99647, -99629,
         -99618, -99586, -99586, -99566, -99534, -99530, -99492, -99471, -99466, -99444, -99411, -99390, -99382, -99364,
         -99364, -99342, -99337, -99318, -99289, -99265, -99257, -99243, -99173, -99159, -99149, -99146, -99142, -99126,
@@ -1497,17 +1593,27 @@ void test_large_list(void) {
         99650,  99651,  99661,  99677,  99705,  99706,  99712,  99739,  99748,  99749,  99779,  99780,  99825,  99849,
         99916,  99920,  99951,  99991,
     };
-    size_t len = array_len(test_list);
-    insertion_sort(test_list, len, sizeof(test_list[0]), *comp_int);
-    print_array_int(test_list, (int)len);
-    TEST_ASSERT_EQUAL_INT_ARRAY(exp, test_list, len);
+    size_t len = array_len(actual);
+
+    insertion_sort(actual, len, sizeof(actual[0]), comp_int);
+
+    // printf("Actual: ");
+    // print_array_int(actual, len);
+    // printf("Expected: ");
+    // print_array_int(expected, len);
+    TEST_ASSERT_EQUAL_INT_ARRAY(expected, actual, len);
 }
 
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_int_list);
     RUN_TEST(test_float_list);
+    RUN_TEST(test_struct_list);
+    RUN_TEST(test_empty_list);
     RUN_TEST(test_single_element_list);
-    RUN_TEST(test_single_element_list);
+    RUN_TEST(test_ordered_list);
+    RUN_TEST(test_reverse_list);
+    RUN_TEST(test_same_elements_list);
+    // RUN_TEST(test_large_list);
     return UNITY_END();
 }
