@@ -1,9 +1,13 @@
 #include "algorithms/insertion_sort.h"
 #include "utils/swap.h"
+#include <assert.h>
 #include <stddef.h>
 #include <stdlib.h>
 
-void insertion_sort(void *base, size_t nmemb, size_t size, comp_fn comp) {
+int insertion_sort(void *base, size_t nmemb, size_t size, comp_fn comp) {
+    if (base == NULL || size == 0 || comp == NULL) return -1;
+    if (nmemb == 0) return 0;
+
     for (size_t i = 1; i < nmemb; i++) {
         size_t j = i - 1;
         char *elem_j = (char *)base + j * size;
@@ -15,4 +19,5 @@ void insertion_sort(void *base, size_t nmemb, size_t size, comp_fn comp) {
             elem_j = (char *)base + j * size;
         }
     }
+    return 0;
 }
