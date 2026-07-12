@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
 message(STATUS "Using CMake version ${CMAKE_VERSION}")
 
-project(template
+project(dsa
     VERSION 0.1.0
     DESCRIPTION "A template C project"
     LANGUAGES C
