@@ -29,7 +29,7 @@ LinkedList_int linkedlist_create_int(void) {
  *  Free the `LinkedList_int` from memory including each list items.
  */
 void linkedlist_free_int(LinkedList_int list) {
-    if (list == NULL && list->head == NULL) return;
+    if (list == NULL || list->head == NULL) return;
 
     struct Node_int *curr = list->head;
     while (curr != NULL) {
