@@ -97,3 +97,29 @@ int linkedlist_prepend_int(LinkedList_int list, int new_value) {
     list->length++;
     return 0;
 }
+
+/**
+ * Pop out the last value in `list`.
+ *
+ * Retval:
+ * - `0`    on success
+ * - `-1`   if fails
+ */
+int linkedlist_pop_int(LinkedList_int list, int *out_value) {
+    if (list == NULL || list->tail == NULL) return -1;
+    *out_value = list->tail->data;
+    return 0;
+}
+
+/**
+ * Shift out the first value in `list`.
+ *
+ * Retval:
+ * - `0`    on success
+ * - `-1`   if fails
+ */
+int linkedlist_shift_int(LinkedList_int list, int *out_value) {
+    if (list == NULL || list->head == NULL) return -1;
+    *out_value = list->head->data;
+    return 0;
+}
