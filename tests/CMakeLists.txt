@@ -12,6 +12,7 @@ function(create_test test_name)
         PRIVATE
             utils
             algorithms
+            data_structures
             project_options
             unity
     )
@@ -19,3 +20,4 @@ function(create_test test_name)
 endfunction()
 
 create_test(test_insertion_sort)
+create_test(test_linkedlist_int)
