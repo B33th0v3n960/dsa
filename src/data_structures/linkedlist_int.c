@@ -1,4 +1,5 @@
 #include "data_structures/linkedlist_int.h"
+#include <stdbool.h>
 #include <stdlib.h>
 
 struct Node_int {
@@ -42,6 +43,22 @@ void linkedlist_free_int(LinkedList_int list) {
     }
     list->tail = NULL;
     free(list);
+}
+
+/**
+ * Get the length of `list`.
+ */
+int linkedlist_len_int(LinkedList_int list) {
+    if (list == NULL) return 0;
+    return list->length;
+}
+
+/**
+ * Check if `list` is empty.
+ */
+bool linkedlist_is_empty_int(LinkedList_int list) {
+    if (list == NULL) return true;
+    return list->length == 0;
 }
 
 /**

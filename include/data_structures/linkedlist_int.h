@@ -1,7 +1,7 @@
 #ifndef LINKEDLIST_INT_H
 #define LINKEDLIST_INT_H
 
-#include "stdbool.h"
+#include <stdbool.h>
 
 typedef struct LinkedList_int *LinkedList_int;
 
