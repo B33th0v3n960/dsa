@@ -94,7 +94,8 @@ void test_append_int_value_and_pop(void) {
     expected = 0;
     expected_pop_value = append_value;
     actual = linkedlist_pop_int(list, &actual_pop_value);
-    printf("Pop value: %d\n", actual_pop_value);
+    printf("Actual Pop value: %d\n", actual_pop_value);
+    printf("Expected Pop value: %d\n", expected_pop_value);
     TEST_ASSERT_EQUAL_INT(expected, actual);
     TEST_ASSERT_EQUAL_INT(expected_pop_value, actual_pop_value);
 }
@@ -112,9 +113,49 @@ void test_append_ten_values_and_pop(void) {
     expected = 0;
     expected_pop_value = 9;
     actual = linkedlist_pop_int(list, &actual_pop_value);
-    printf("Pop value: %d\n", actual_pop_value);
+    printf("Actual Pop value: %d\n", actual_pop_value);
+    printf("Expected Pop value: %d\n", expected_pop_value);
     TEST_ASSERT_EQUAL_INT(expected, actual);
     TEST_ASSERT_EQUAL_INT(expected_pop_value, actual_pop_value);
+}
+
+void test_prepend_int_value_and_shift(void) {
+    int actual, expected, shift_value, actual_shift_value, expected_shift_value;
+    expected = 0;
+    shift_value = 5;
+    linkedlist_prepend_int(list, 1);
+    actual = linkedlist_prepend_int(list, shift_value);
+    printf("Actual: %d\n", actual);
+    printf("Expected: %d\n", expected);
+
+    TEST_ASSERT_EQUAL_INT(expected, actual);
+
+    expected = 0;
+    expected_shift_value = shift_value;
+    actual = linkedlist_shift_int(list, &actual_shift_value);
+    printf("Actual shift value: %d\n", actual_shift_value);
+    printf("Expected shift value: %d\n", expected_shift_value);
+    TEST_ASSERT_EQUAL_INT(expected, actual);
+    TEST_ASSERT_EQUAL_INT(expected_shift_value, actual_shift_value);
+}
+
+void test_prepend_ten_values_and_shift(void) {
+    int actual, expected, actual_shift_value, expected_shift_value;
+    expected = 0;
+
+    for (int i = 0; i < 10; i++)
+        actual = linkedlist_prepend_int(list, i);
+    printf("Actual: %d\n", actual);
+    printf("Expected: %d\n", expected);
+    TEST_ASSERT_EQUAL_INT(expected, actual);
+
+    expected = 0;
+    expected_shift_value = 9;
+    actual = linkedlist_shift_int(list, &actual_shift_value);
+    printf("Actual shift value: %d\n", actual_shift_value);
+    printf("Expected shift value: %d\n", expected_shift_value);
+    TEST_ASSERT_EQUAL_INT(expected, actual);
+    TEST_ASSERT_EQUAL_INT(expected_shift_value, actual_shift_value);
 }
 
 int main(void) {
@@ -127,5 +168,7 @@ int main(void) {
     RUN_TEST(test_prepend_ten_values);
     RUN_TEST(test_append_int_value_and_pop);
     RUN_TEST(test_append_ten_values_and_pop);
+    RUN_TEST(test_prepend_int_value_and_shift);
+    RUN_TEST(test_prepend_ten_values_and_shift);
     return UNITY_END();
 }
