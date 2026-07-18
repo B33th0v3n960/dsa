@@ -158,6 +158,18 @@ void test_prepend_ten_values_and_shift(void) {
     TEST_ASSERT_EQUAL_INT(expected_shift_value, actual_shift_value);
 }
 
+void test_linkedlist_len(void) {
+    int actual, expected;
+    expected = 10;
+
+    for (int i = 0; i < expected; i++)
+        linkedlist_prepend_int(list, i);
+    actual = linkedlist_len_int(list);
+    printf("Actual: %d\n", actual);
+    printf("Expected: %d\n", expected);
+    TEST_ASSERT_EQUAL_INT(expected, actual);
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_append_int_value);
@@ -170,5 +182,6 @@ int main(void) {
     RUN_TEST(test_append_ten_values_and_pop);
     RUN_TEST(test_prepend_int_value_and_shift);
     RUN_TEST(test_prepend_ten_values_and_shift);
+    RUN_TEST(test_linkedlist_len);
     return UNITY_END();
 }
