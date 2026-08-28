@@ -2,13 +2,15 @@
 #define LINKEDLIST_INT_H
 
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdlib.h>
 
 typedef struct LinkedList_int *LinkedList_int;
 
 LinkedList_int linkedlist_create_int(void);
 void linkedlist_free_int(LinkedList_int list);
 
-int linkedlist_len_int(LinkedList_int list);
+size_t linkedlist_len_int(LinkedList_int list);
 bool linkedlist_is_empty_int(LinkedList_int list);
 
 int linkedlist_append_int(LinkedList_int list, int new_value);

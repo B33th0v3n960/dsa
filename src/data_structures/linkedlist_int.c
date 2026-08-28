@@ -1,5 +1,6 @@
 #include "data_structures/linkedlist_int.h"
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 struct Node_int {
@@ -11,7 +12,7 @@ struct Node_int {
 struct LinkedList_int {
     struct Node_int *head;
     struct Node_int *tail;
-    int length;
+    size_t length;
 };
 
 /**
@@ -48,7 +49,7 @@ void linkedlist_free_int(LinkedList_int list) {
 /**
  * Get the length of `list`.
  */
-int linkedlist_len_int(LinkedList_int list) {
+size_t linkedlist_len_int(LinkedList_int list) {
     if (list == NULL) return 0;
     return list->length;
 }
@@ -116,7 +117,7 @@ int linkedlist_prepend_int(LinkedList_int list, int new_value) {
 }
 
 /**
- * Pop out the last value in `list`.
+ * Pop out the last value in `list` and delete the last node.
  *
  * Retval:
  * - `0`    on success
@@ -125,11 +126,23 @@ int linkedlist_prepend_int(LinkedList_int list, int new_value) {
 int linkedlist_pop_int(LinkedList_int list, int *out_value) {
     if (list == NULL || list->tail == NULL) return -1;
     *out_value = list->tail->data;
+
+    if (list->head == list->tail) {
+        free(list->head);
+        list->head = list->tail = NULL;
+        list->length = 0;
+        return 0;
+    }
+
+    list->tail = list->tail->prev;
+    free(list->tail->next);
+    list->tail->next = NULL;
+    list->length--;
     return 0;
 }
 
 /**
- * Shift out the first value in `list`.
+ * Shift out the first value in `list` and delete the first node.
  *
  * Retval:
  * - `0`    on success
@@ -138,5 +151,17 @@ int linkedlist_pop_int(LinkedList_int list, int *out_value) {
 int linkedlist_shift_int(LinkedList_int list, int *out_value) {
     if (list == NULL || list->head == NULL) return -1;
     *out_value = list->head->data;
+
+    if (list->head == list->tail) {
+        free(list->head);
+        list->head = list->tail = NULL;
+        list->length = 0;
+        return 0;
+    }
+
+    list->head = list->head->next;
+    free(list->head->prev);
+    list->head->prev = NULL;
+    list->length--;
     return 0;
 }
