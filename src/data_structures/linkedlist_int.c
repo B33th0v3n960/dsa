@@ -165,3 +165,43 @@ int linkedlist_shift_int(LinkedList_int list, int *out_value) {
     list->length--;
     return 0;
 }
+
+/**
+ * Get the value at give `index`.
+ *
+ * Retval:
+ * - `0`    on success
+ * - `-1`   if fails
+ */
+int linkedlist_get_int(LinkedList_int list, int index, int *out_value) {
+    if (list == NULL || list->head == NULL) return -1;
+
+    struct Node_int *current;
+    current = list->head;
+    for (int i = 0; i < index; i++)
+        current = current->next;
+    *out_value = list->head->data;
+    return 0;
+}
+
+/**
+ * Get the index of the first node that has value of `search_value`.
+ *
+ * Retval:
+ * - `index`  index of the element if exist.
+ * - `-1`     if fails
+ */
+int linkedlist_search_int(LinkedList_int list, int search_value) {
+    if (list == NULL || list->head == NULL) return -1;
+
+    struct Node_int *current;
+    current = list->head;
+    int index = 0;
+    while (current != NULL && current->data != search_value) {
+        current = current->next;
+        index++;
+    }
+
+    if (current == NULL) return -1;
+    return index;
+}

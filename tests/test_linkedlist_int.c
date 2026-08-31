@@ -191,6 +191,27 @@ void test_prepend_ten_values_and_shift(void) {
     TEST_ASSERT_EQUAL_INT(expected_len, actual_len);
 }
 
+void test_get_and_search(void) {
+    int actual, expected;
+    expected = 0;
+
+    for (int i = 0; i < 10; i++)
+        actual = linkedlist_prepend_int(list, i);
+    printf("Actual: %d\n", actual);
+    printf("Expected: %d\n", expected);
+    TEST_ASSERT_EQUAL_INT(expected, actual);
+
+    int expected_index, actual_index;
+    expected_index = 9;
+    int search_value = 0;
+    actual_index = linkedlist_search_int(list, search_value);
+    printf("Actual index: %d\n", actual_index);
+    printf("Expected index: %d\n", expected_index);
+
+    TEST_ASSERT_EQUAL_INT(expected, actual);
+    TEST_ASSERT_EQUAL_INT(expected_index, actual_index);
+}
+
 void test_linkedlist_len(void) {
     size_t actual;
     int expected;
@@ -216,6 +237,7 @@ int main(void) {
     RUN_TEST(test_append_ten_values_and_pop);
     RUN_TEST(test_prepend_int_value_and_shift);
     RUN_TEST(test_prepend_ten_values_and_shift);
+    RUN_TEST(test_get_and_search);
     RUN_TEST(test_linkedlist_len);
     return UNITY_END();
 }
