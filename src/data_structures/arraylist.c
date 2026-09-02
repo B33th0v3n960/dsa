@@ -1,15 +1,37 @@
 #include "data_structures/arraylist.h"
+
 #include <stddef.h>
+#include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define DEFAULT_ARRAYLIST_SIZE 8
 
 struct ArrayList {
-    void **data;
+    char *data;
     size_t length;
     size_t capacity;
     size_t element_size;
 };
+
+/**
+ * Realloc and extended the size of `list`.
+ *
+ * Retval:
+ * `0`   on success
+ * `-1`  if allocation fails
+ */
+static int arraylist_grow(ArrayList list) {
+    size_t new_capacity = list->capacity * 2;
+    if (new_capacity > SIZE_MAX / list->element_size) return -1;
+
+    char *new_data = realloc(list->data, new_capacity * list->element_size);
+    if (new_data == NULL) return -1;
+
+    list->data = new_data;
+    list->capacity = new_capacity;
+    return 0;
+}
 
 /**
  * Creates a ArrayList on the heap.
@@ -38,9 +60,8 @@ ArrayList arraylist_create(size_t element_size) {
  *  Free the `ArrayList` from memory including each list items.
  */
 void arraylist_free(ArrayList list) {
-    for (size_t i = 0; i < list->length; i++) {
-        free(list->data[i]);
-    }
+    if (list == NULL) return;
+
     free(list->data);
     free(list);
 }
@@ -53,14 +74,40 @@ size_t arraylist_len(ArrayList list) {
     return list->length;
 }
 
+/**
+ * Append a new element, with value of `new_value`, to the end of `list`.
+ *
+ * Retval:
+ * - `0`    on success
+ * - `-1`   if fails
+ */
 int arraylist_append(ArrayList list, void *new_value) {
-    (void)list, (void)new_value;
-    return -1;
+    if (list == NULL || list->data == NULL) return -1;
+    if (list->length == list->capacity && arraylist_grow(list) != 0) return -1;
+
+    char *new_element_address = list->data + list->length * list->element_size;
+    memcpy(new_element_address, new_value, list->element_size);
+    list->length++;
+    return 0;
 }
+
+/**
+ * Prepend a new element, with value of `new_value`, to the beginning of `list`.
+ *
+ * Retval:
+ * - `0`    on success
+ * - `-1`   if fails
+ */
 int arraylist_prepend(ArrayList list, void *new_value) {
-    (void)list, (void)new_value;
-    return -1;
+    if (list == NULL || list->data == NULL) return -1;
+    if (list->length == list->capacity && arraylist_grow(list) != 0) return -1;
+
+    memmove(list->data + list->element_size, list->data, list->element_size * list->length);
+    memcpy(list->data, new_value, list->element_size);
+    list->length++;
+    return 0;
 }
+
 int arraylist_insert(ArrayList list, int insert_index, void *new_value) {
     (void)list, (void)insert_index, (void)new_value;
     return -1;
