@@ -24,8 +24,9 @@ target_link_libraries(algorithms PRIVATE utils project_options)
 
 create_library(data_structures
     ./data_structures/linkedlist_int.c
+    ./data_structures/arraylist.c
 )
-target_link_libraries(algorithms PRIVATE project_options)
+target_link_libraries(data_structures PRIVATE utils project_options)
 
 # buildin the main executable
 add_executable(${PROJECT_NAME} main.c)
@@ -34,6 +35,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         utils
         algorithms
+        data_structures
         project_options
 )
 

@@ -21,3 +21,4 @@ endfunction()
 
 create_test(test_insertion_sort)
 create_test(test_linkedlist_int)
+create_test(test_arraylist)
