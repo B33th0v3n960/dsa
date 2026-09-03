@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -82,7 +83,7 @@ size_t arraylist_len(ArrayList list) {
  * - `-1`   if fails
  */
 int arraylist_append(ArrayList list, void *new_value) {
-    if (list == NULL || list->data == NULL) return -1;
+    if (list == NULL || list->data == NULL || new_value == NULL) return -1;
     if (list->length == list->capacity && arraylist_grow(list) != 0) return -1;
 
     char *new_element_address = list->data + list->length * list->element_size;
@@ -99,7 +100,7 @@ int arraylist_append(ArrayList list, void *new_value) {
  * - `-1`   if fails
  */
 int arraylist_prepend(ArrayList list, void *new_value) {
-    if (list == NULL || list->data == NULL) return -1;
+    if (list == NULL || list->data == NULL || new_value == NULL) return -1;
     if (list->length == list->capacity && arraylist_grow(list) != 0) return -1;
 
     memmove(list->data + list->element_size, list->data, list->element_size * list->length);
@@ -108,19 +109,38 @@ int arraylist_prepend(ArrayList list, void *new_value) {
     return 0;
 }
 
-int arraylist_insert(ArrayList list, int insert_index, void *new_value) {
-    (void)list, (void)insert_index, (void)new_value;
-    return -1;
+/**
+ * Insert a new `Node_int`, with value of `new_value`, at index `insert_index` of `list`.
+ *
+ * Retval:
+ * - `0`    on success
+ * - `-1`   if fails
+ */
+int arraylist_insert(ArrayList list, size_t insert_index, void *new_value) {
+    if (list == NULL || list->data == NULL || new_value == NULL) return -1;
+    if (list->length == list->capacity && arraylist_grow(list) != 0) return -1;
+
+    char *insert_address = list->data + list->element_size * insert_index;
+    memmove(insert_address + list->element_size, insert_address, list->element_size * list->length);
+    memcpy(insert_address, new_value, list->element_size);
+    list->length++;
+    return 0;
 }
 
 int arraylist_pop(ArrayList list, void *out_value) {
-    (void)list, (void)out_value;
-    return -1;
+    if (list == NULL || list->data == NULL || out_value == NULL) return -1;
+    list->length--;
+    memcpy(out_value, list->data + list->length * list->element_size, list->element_size);
+    return 0;
 }
+
 int arraylist_shift(ArrayList list, void *out_value) {
-    (void)list, (void)out_value;
-    return -1;
+    if (list == NULL || list->data == NULL || out_value == NULL) return -1;
+    memcpy(out_value, list->data, list->element_size);
+    memmove(list->data, list->data + list->element_size, list->element_size * --list->length);
+    return 0;
 }
+
 int arraylist_get(ArrayList list, int index, void *out_value) {
     (void)list, (void)index, (void)out_value;
     return -1;

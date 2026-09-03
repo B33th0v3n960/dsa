@@ -14,7 +14,7 @@ size_t arraylist_len(ArrayList list);
 
 int arraylist_append(ArrayList list, void *new_value);
 int arraylist_prepend(ArrayList list, void *new_value);
-int arraylist_insert(ArrayList list, int insert_index, void *new_value);
+int arraylist_insert(ArrayList list, size_t insert_index, void *new_value);
 
 int arraylist_pop(ArrayList list, void *out_value);
 int arraylist_shift(ArrayList list, void *out_value);
