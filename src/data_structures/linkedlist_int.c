@@ -112,6 +112,33 @@ int linkedlist_prepend_int(LinkedList_int list, int new_value) {
 }
 
 /**
+ * Insert a new `Node_int`, with value of `new_value`, at index `insert_index` of `list`.
+ *
+ * Retval:
+ * - `0`    on success
+ * - `-1`   if fails
+ */
+int linkedlist_insert_int(LinkedList_int list, int insert_index, int new_value) {
+    if (list == NULL || list->head == NULL) return -1;
+    struct Node_int *new_node = malloc(sizeof(struct Node_int));
+    if (new_node == NULL) return -1;
+    new_node->data = new_value;
+
+    struct Node_int *current;
+    current = list->head;
+    int current_index;
+    for (current_index = 0; current_index < insert_index; current_index++)
+        current = current->next;
+
+    if (current_index != insert_index) return -1;
+    new_node->prev = current->prev;
+    current->prev->next = new_node;
+    new_node->next = current;
+    current->prev = new_node;
+    return 0;
+}
+
+/**
  * Pop out the last value in `list` and delete the last node.
  *
  * Retval:
@@ -170,6 +197,7 @@ int linkedlist_shift_int(LinkedList_int list, int *out_value) {
  */
 int linkedlist_get_int(LinkedList_int list, int index, int *out_value) {
     if (list == NULL || list->head == NULL) return -1;
+    if (index >= (int)list->length || index < 0) return -1;
 
     struct Node_int *current;
     current = list->head;
