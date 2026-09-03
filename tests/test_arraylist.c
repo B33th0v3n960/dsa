@@ -98,9 +98,8 @@ void test_append_int_value_and_pop(void) {
     printf("Expected: %d\n", expected);
     TEST_ASSERT_EQUAL_INT(expected, actual);
 
-    expected = 0;
     expected_pop_value = append_value;
-    actual = arraylist_pop(list, &actual_pop_value);
+    arraylist_pop(list, &actual_pop_value);
     printf("Actual Pop value: %d\n", actual_pop_value);
     printf("Expected Pop value: %d\n", expected_pop_value);
     TEST_ASSERT_EQUAL_INT(expected_pop_value, actual_pop_value);
@@ -123,9 +122,8 @@ void test_append_ten_values_and_pop(void) {
     printf("Expected: %d\n", expected);
     TEST_ASSERT_EQUAL_INT(expected, actual);
 
-    expected = 0;
     expected_pop_value = 9;
-    actual = arraylist_append(list, &actual_pop_value);
+    arraylist_pop(list, &actual_pop_value);
     printf("Actual Pop value: %d\n", actual_pop_value);
     printf("Expected Pop value: %d\n", expected_pop_value);
     TEST_ASSERT_EQUAL_INT(expected_pop_value, actual_pop_value);
@@ -148,9 +146,8 @@ void test_prepend_int_value_and_shift(void) {
     printf("Expected: %d\n", expected);
     TEST_ASSERT_EQUAL_INT(expected, actual);
 
-    expected = 0;
     expected_shift_value = shift_value;
-    actual = arraylist_shift(list, &actual_shift_value);
+    arraylist_shift(list, &actual_shift_value);
     printf("Actual shift value: %d\n", actual_shift_value);
     printf("Expected shift value: %d\n", expected_shift_value);
     TEST_ASSERT_EQUAL_INT(expected_shift_value, actual_shift_value);
@@ -173,9 +170,8 @@ void test_prepend_ten_values_and_shift(void) {
     printf("Expected: %d\n", expected);
     TEST_ASSERT_EQUAL_INT(expected, actual);
 
-    expected = 0;
     expected_shift_value = 9;
-    actual = arraylist_prepend(list, &actual_shift_value);
+    arraylist_shift(list, &actual_shift_value);
     printf("Actual shift value: %d\n", actual_shift_value);
     printf("Expected shift value: %d\n", expected_shift_value);
     TEST_ASSERT_EQUAL_INT(expected_shift_value, actual_shift_value);
@@ -217,6 +213,27 @@ void test_get_and_search_empty_list(void) {
     TEST_ASSERT_EQUAL_INT(expected_index, actual_index);
 }
 
+void test_insert_and_get(void) {
+    int actual, expected, expected_index, actual_index;
+    expected = 0;
+
+    for (int i = 0; i < 10; i++)
+        actual = arraylist_prepend(list, &i);
+    printf("Actual: %d\n", actual);
+    printf("Expected: %d\n", expected);
+    TEST_ASSERT_EQUAL_INT(expected, actual);
+
+    expected_index = 5;
+    int new_value = 0;
+    arraylist_insert(list, (size_t)expected_index, &new_value);
+
+    int search_value = 0;
+    actual_index = arraylist_search(list, &search_value, NULL);
+    printf("Actual index: %d\n", actual_index);
+    printf("Expected index: %d\n", expected_index);
+    TEST_ASSERT_EQUAL_INT(expected_index, actual_index);
+}
+
 void test_linkedlist_len(void) {
     size_t actual;
     int expected;
@@ -243,6 +260,7 @@ int main(void) {
     RUN_TEST(test_prepend_int_value_and_shift);
     RUN_TEST(test_prepend_ten_values_and_shift);
     RUN_TEST(test_get_and_search);
+    RUN_TEST(test_insert_and_get);
     RUN_TEST(test_get_and_search_empty_list);
     RUN_TEST(test_linkedlist_len);
     return UNITY_END();
