@@ -136,18 +136,29 @@ int arraylist_pop(ArrayList list, void *out_value) {
 
 int arraylist_shift(ArrayList list, void *out_value) {
     if (list == NULL || list->data == NULL || out_value == NULL) return -1;
+    list->length--;
     memcpy(out_value, list->data, list->element_size);
-    memmove(list->data, list->data + list->element_size, list->element_size * --list->length);
+    memmove(list->data, list->data + list->element_size, list->element_size * list->length);
     return 0;
 }
 
-int arraylist_get(ArrayList list, int index, void *out_value) {
-    (void)list, (void)index, (void)out_value;
-    return -1;
+int arraylist_get(ArrayList list, size_t index, void *out_value) {
+    if (list == NULL || list->data == NULL || index > list->length) return -1;
+
+    char *selected_element = list->data + list->element_size * index;
+    memcpy(out_value, selected_element, list->element_size);
+    return 0;
 }
 int arraylist_search(ArrayList list, void *search_value, comp_fn comp) {
-    (void)list, (void)search_value, (void)comp;
-    return -1;
+    if (list == NULL || list->data == NULL || comp == NULL) return -1;
+
+    size_t i = 0;
+    char *current_element = list->data;
+    while (comp(search_value, current_element) != 0 && i++ < list->length)
+        current_element = list->data + list->element_size * i;
+
+    if (i >= list->length) return -1;
+    return (int)i;
 }
 
 int arraylist_reverse(ArrayList list) {

@@ -8,6 +8,12 @@
 static int test_count = 0;
 ArrayList list;
 
+int comp_int(const void *a, const void *b) {
+    const int value_a = *(int *)a;
+    const int value_b = *(int *)b;
+    return (value_a > value_b) - (value_a < value_b);
+}
+
 void setUp(void) {
     ++test_count;
     printf("\n");
@@ -196,7 +202,7 @@ void test_get_and_search(void) {
 
     expected_index = 9;
     int search_value = 0;
-    actual_index = arraylist_search(list, &search_value, NULL);
+    actual_index = arraylist_search(list, &search_value, comp_int);
     printf("Actual index: %d\n", actual_index);
     printf("Expected index: %d\n", expected_index);
     TEST_ASSERT_EQUAL_INT(expected_index, actual_index);
@@ -206,7 +212,7 @@ void test_get_and_search_empty_list(void) {
     int expected_index, actual_index;
     expected_index = -1;
     int search_value = 0;
-    actual_index = arraylist_search(list, &search_value, NULL);
+    actual_index = arraylist_search(list, &search_value, comp_int);
     printf("Actual index: %d\n", actual_index);
     printf("Expected index: %d\n", expected_index);
 
@@ -228,7 +234,7 @@ void test_insert_and_get(void) {
     arraylist_insert(list, (size_t)expected_index, &new_value);
 
     int search_value = 0;
-    actual_index = arraylist_search(list, &search_value, NULL);
+    actual_index = arraylist_search(list, &search_value, comp_int);
     printf("Actual index: %d\n", actual_index);
     printf("Expected index: %d\n", expected_index);
     TEST_ASSERT_EQUAL_INT(expected_index, actual_index);

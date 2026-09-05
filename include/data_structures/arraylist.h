@@ -18,7 +18,7 @@ int arraylist_insert(ArrayList list, size_t insert_index, void *new_value);
 
 int arraylist_pop(ArrayList list, void *out_value);
 int arraylist_shift(ArrayList list, void *out_value);
-int arraylist_get(ArrayList list, int index, void *out_value);
+int arraylist_get(ArrayList list, size_t index, void *out_value);
 int arraylist_search(ArrayList list, void *search_value, comp_fn comp);
 
 int arraylist_reverse(ArrayList list);
